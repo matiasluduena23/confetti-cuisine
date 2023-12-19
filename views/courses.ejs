@@ -1,0 +1,17 @@
+<%- include('layout/header') %>
+<section>
+  <h2>Courses</h2>
+  <article class="grid">
+    <img src="images/dish.webp" alt="" />
+    <div>
+      <h3>Learn to cook cuting edge food</h3>
+      <h4>Our Courses</h4>
+      <% offeredCourses.forEach(course => { %>
+      <p><%= course.title %></p>
+      <p>$ <%= course.cost %></p>
+      <% }) %>
+    </div>
+  </article>
+</section>
+
+<%- include('layout/footer') %>

@@ -1,27 +1,32 @@
-const express = require('express'),
-    app = express(),
-    homeController = require('./controllers/homeController');
+const express = require("express"),
+  app = express(),
+  homeController = require("./controllers/homeController"),
+  errorController = require("./controllers/errorController");
 
-app.set('port', process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3000);
 
 // body parsing
 app.use(
-    express.urlencoded({
-        extended: false,
-    })
+  express.urlencoded({
+    extended: false,
+  })
 );
 app.use(express.json());
 
-app.use(express.static('public'));
+app.set("view engine", "ejs");
+app.use(express.static("public"));
 
-app.get('/', (req, res) => {
-    res.send('index');
+app.get("/", (req, res) => {
+  res.render("index");
 });
 
-app.get('/courses', homeController.showCourses);
-app.get('/contact', homeController.showContact);
-app.post('/contact', homeController.postSignUpForm);
+app.get("/courses", homeController.showCourses);
+app.get("/contact", homeController.showContact);
+app.post("/contact", homeController.postSignUpForm);
 
-app.listen(app.get('port'), () => {
-    console.log(`Server listen on port ${app.get('port')}`);
+app.listen(app.get("port"), () => {
+  console.log(`Server listen on port ${app.get("port")}`);
 });
+
+app.use(errorController.pageNotFoundError);
+app.use(errorController.InternalServerError);
