@@ -1,9 +1,21 @@
 const express = require("express"),
   app = express(),
+  mongoose = require("mongoose"),
   homeController = require("./controllers/homeController"),
   errorController = require("./controllers/errorController");
+require("dotenv").config();
 
 app.set("port", process.env.PORT || 3000);
+
+//datbase connection
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.j1ke0lv.mongodb.net/?retryWrites=true&w=majority`
+);
+
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("Successfully connected to mongo!");
+});
 
 // body parsing
 app.use(
@@ -11,6 +23,7 @@ app.use(
     extended: false,
   })
 );
+
 app.use(express.json());
 
 app.set("view engine", "ejs");
