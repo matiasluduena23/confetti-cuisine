@@ -1,0 +1,15 @@
+<%- include('layout/header') %>
+<section>
+  <h2>Subscribers</h2>
+  <section>
+    <% arrSubscriber.forEach(subcriber => { %>
+    <div class="box">
+      <p>Name: <span><%= subcriber.name %></span></p>
+      <p>Email: <span><%= subcriber.email %></span></p>
+      <p>Id: <span><%= subcriber.id %></span></p>
+    </div>
+    <% }) %>
+  </section>
+</section>
+
+<%- include('layout/footer') %>
