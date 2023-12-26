@@ -3,22 +3,19 @@ const express = require('express'),
     mongoose = require('mongoose'),
     homeController = require('./controllers/homeController'),
     subscribersController = require('./controllers/subscribersController'),
-    errorController = require('./controllers/errorController'),
-    Subscriber = require('./models/subscriber');
+    errorController = require('./controllers/errorController');
+
 require('dotenv').config();
 
 app.set('port', process.env.PORT || 3000);
 
 //datbase connection
-mongoose.connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.j1ke0lv.mongodb.net/Confetti_db?retryWrites=true&w=majority`
-);
-const db = mongoose.connection;
-db.once('open', () => {
-    console.log('Successfully connected to mongo!');
-});
-
-//insert data
+mongoose
+    .connect(
+        `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.j1ke0lv.mongodb.net/Confetti_db?retryWrites=true&w=majority`
+    )
+    .then(() => console.log('Successfully connected to mongo!'))
+    .catch((error) => console.log(`Error connecting to Database ${error}`));
 
 // body parsing
 app.use(
@@ -40,7 +37,8 @@ app.get('/courses', homeController.showCourses);
 app.get('/contact', homeController.showContact);
 app.post('/contact', homeController.postSignUpForm);
 
-app.get('/subscribers', subscribersController.getSubscribers);
+app.get('/subscriber', subscribersController.getSubscribers);
+app.post('/subscriber', subscribersController.postSuscriber);
 
 app.listen(app.get('port'), () => {
     console.log(`Server listen on port ${app.get('port')}`);
