@@ -1,8 +1,11 @@
+const course = require("./models/course");
+
 const express = require("express"),
   app = express(),
   mongoose = require("mongoose"),
   homeController = require("./controllers/homeController"),
   subscribersController = require("./controllers/subscribersController"),
+  courseController = require("./controllers/courseController"),
   errorController = require("./controllers/errorController");
 
 require("dotenv").config();
@@ -24,7 +27,11 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/courses", homeController.showCourses);
+app.get("/courses", courseController.getCourses);
+app.post("/courses", courseController.postCourse);
+app.put("/courses/:id", courseController.putCourse);
+app.delete("/courses/:id", courseController.deleteCourse);
+
 app.get("/contact", homeController.showContact);
 app.post("/contact", homeController.postSignUpForm);
 

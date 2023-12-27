@@ -1,14 +1,25 @@
-const { default: mongoose } = require("mongoose");
 const Subscriber = require("../models/subscriber");
 require("../connection");
 
+// exports.getSubscribers = (req, res, next) => {
+//   Subscriber.find({})
+//     .then((data) => {
+//       res.render("suscriber", { arrSubscriber: data });
+//     })
+//     .catch((error) => {
+//       next(error);
+//     });
+// };
+
 exports.getSubscribers = (req, res, next) => {
-  Subscriber.find({})
-    .then((data) => {
-      res.render("suscriber", { arrSubscriber: data });
+  Subscriber.findOne()
+    .populate("courses")
+    .then((subscriber) => {
+      console.log(subscriber);
+      res.json(subscriber);
     })
     .catch((error) => {
-      next(error);
+      res.send("error get" + error);
     });
 };
 
@@ -46,10 +57,14 @@ exports.postSuscriber = (req, res, next) => {
 };
 
 exports.putSuscriber = (req, res, next) => {
+  const allCourse = getCoursesfromSuscriber(req.params.id);
+  console.log(req.params.id);
+
   const suscriber = {
     name: req.body.name,
     email: req.body.email,
     zipCode: req.body.zipCode,
+    courses: allCourse ? [req.body.courses, allCourse] : req.body.courses,
   };
 
   Subscriber.findOneAndUpdate({ _id: req.params.id }, suscriber, { new: true })
@@ -78,5 +93,15 @@ exports.deleteSuscriber = (req, res, next) => {
     })
     .catch((error) => {
       next(error);
+    });
+};
+
+const getCoursesfromSuscriber = (id) => {
+  Subscriber.findById(id)
+    .then((data) => {
+      return data ? data.courses : [];
+    })
+    .catch((error) => {
+      return [];
     });
 };
